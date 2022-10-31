@@ -1,4 +1,12 @@
 <?php
+ini_set('session.gc_maxlifetime', 3600);
+
+// each client should remember their session id for EXACTLY 1 hour
+session_set_cookie_params(3600);
+session_start();
+
+error_reporting(0); 
+
 if (!function_exists('str_contains')) {
     function str_contains(string $haystack, string $needle): bool
     {
@@ -6,7 +14,14 @@ if (!function_exists('str_contains')) {
     }
 }
 
-$html =  file_get_contents("https://www.google.com/search?q=olamovies");
+
+
+// #main > div:nth-child(5) > div > div > a
+
+function g_search($qry){
+  $replaced = str_replace(' ', '+', $qry);
+
+  $html =  file_get_contents("https://www.google.com/search?q=$replaced");
 $dom = new DOMDocument();
 $dom->loadHTML($html);
 
@@ -19,11 +34,22 @@ foreach($links as $link) {
         // $urls[] = "https://google.com" . $url;
         $parsed_url = parse_url("https://google.com" . $url);
        parse_str($parsed_url['query'], $params);
-        $urls[] = $params["q"];
+        $d = parse_url($params["q"]);
+        $urls[] = ["url" => $params["q"],"domain"=>$d["host"]];
          }
 }
-var_dump($urls);
 
-// #main > div:nth-child(5) > div > div > a
+  return $urls;
+  
+}
+
+
+
+if(isset($_GET['qry'])){
+  //header("Access-Control-Allow-Origin: *");
+ //header('Content-Type: application/json; charset=utf-8');
+  $search = g_search($_GET['qry']);
+  echo json_encode($search);
+}
 
 ?>

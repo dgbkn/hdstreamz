@@ -1,3 +1,7 @@
+<?php
+header('Location: wp/index.php');
+?>
+
 <html lang="en">
 <head>
     <title>HD Streamz Channels List</title>
@@ -36,6 +40,8 @@ padding: 12px 20px 12px 40px;
 
 
 <div align="center"> <h2> Find HD Streamz Channels List</h2><input id='myInput' onkeyup='searchTable()' placeholder="Search for names.." type='text'> </div></br>
+  <a href='/gsearch.php'>GSearch</a>
+  <br>
 <div align="center"> <h2>Channels List</h2><table id="mytable" align="center">
   <tr>
     <th style="width:5%;">No. </th>
